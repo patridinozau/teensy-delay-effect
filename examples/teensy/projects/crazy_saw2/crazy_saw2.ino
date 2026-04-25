@@ -1,5 +1,5 @@
 #include <Audio.h>
-#include "MyDsp.h"
+#include "MyDsp2.h"
 
 MyDsp myDsp;
 AudioOutputI2S out;
@@ -14,7 +14,7 @@ void setup() {
 }
 
 void loop() {
-  float b1=analogRead(A0)/1023.0*2.0-1.0;
-  myDsp.setB1(b1);
+  int potValue=analogRead(A0);
+  myDsp.setFreq(A0);
   delay(100);
 }

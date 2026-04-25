@@ -5,10 +5,10 @@
 #include "AudioStream.h"
 #include "Audio.h"
 
-#include "Sine.h"
+#include "Phasor.h"
 #include "Echo.h"
 
-class MyDsp : public AudioStream
+class MyDsp2 : public AudioStream
 {
   public:
     MyDsp();
@@ -16,9 +16,10 @@ class MyDsp : public AudioStream
     
     virtual void update(void);
     void setFreq(float freq);
-    
+    void setVolume(int vol);    
+
   private:
-    Sine sine;
+    Phasor sawtooth;
     Echo echo;
 };
 

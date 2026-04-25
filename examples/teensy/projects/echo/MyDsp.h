@@ -12,6 +12,7 @@ class MyDsp : public AudioStream
   public:
     MyDsp();
     ~MyDsp();
+    bool btn;
     
     virtual void update(void);
     

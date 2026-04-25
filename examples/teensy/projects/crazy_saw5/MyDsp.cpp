@@ -6,7 +6,7 @@
 
 MyDsp::MyDsp() : 
 AudioStream(AUDIO_OUTPUTS, new audio_block_t*[AUDIO_OUTPUTS]),
-sine(AUDIO_SAMPLE_RATE_EXACT),
+sawtooth(AUDIO_SAMPLE_RATE_EXACT),
 echo(AUDIO_SAMPLE_RATE_EXACT,10000)
 {
   echo.setDel(10000);
@@ -17,7 +17,11 @@ MyDsp::~MyDsp(){}
 
 // set sine wave frequency
 void MyDsp::setFreq(float freq){
-  sine.setFrequency(freq);
+  sawtooth.setFrequency(freq);
+}
+
+void MyDsp::setVolume(float vol){
+  volume=vol;
 }
 
 void MyDsp::update(void) {
@@ -26,7 +30,7 @@ void MyDsp::update(void) {
     outBlock[channel] = allocate();
     if (outBlock[channel]) {
       for (int i = 0; i < AUDIO_BLOCK_SAMPLES; i++) {
-        float currentSample = echo.tick(sine.tick())*0.5;
+        float currentSample = echo.tick(sawtooth.tick()*2 - 1)*volume;
         currentSample = max(-1,min(1,currentSample));
         int16_t val = currentSample*MULT_16;
         outBlock[channel]->data[i] = val;

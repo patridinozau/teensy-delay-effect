@@ -20,11 +20,7 @@ void loop() {
   float potValue=analogRead(A0)/1023.0*1950.0 + 50.0;
   float volume=analogRead(A2)/1023.0;
   myDsp.setFreq(potValue);
-  state=digitalRead(0);
-  if(state==1)
-    myDsp.setVolume(0);
-  if(state==0)
-    myDsp.setVolume(volume);
+  myDsp.setVolume(volume);
   Serial.println(state);
   delay(100);
 }

@@ -1,10 +1,10 @@
-#include "MyDsp.h"
+#include "MyDsp2.h"
 
 #define AUDIO_OUTPUTS 1
 
 #define MULT_16 32767
 
-MyDsp::MyDsp() : 
+MyDsp2::MyDsp2() : 
 AudioStream(AUDIO_OUTPUTS, new audio_block_t*[AUDIO_OUTPUTS]),
 sawtooth(AUDIO_SAMPLE_RATE_EXACT),
 echo(AUDIO_SAMPLE_RATE_EXACT,10000)
@@ -13,24 +13,25 @@ echo(AUDIO_SAMPLE_RATE_EXACT,10000)
   echo.setFeedback(0.5);
 }
 
-MyDsp::~MyDsp(){}
+MyDsp2::~MyDsp2(){}
 
 // set sine wave frequency
-void MyDsp::setFreq(float freq){
+void MyDsp2::setFreq(float freq){
   sawtooth.setFrequency(freq);
 }
 
-void MyDsp::setVolume(float vol){
-  volume=vol;
+// set sine wave frequency
+void MyDsp2::setVolume(float vol){
+  sawtooth.setVolume(vol);
 }
 
-void MyDsp::update(void) {
+void MyDsp2::update(void) {
   audio_block_t* outBlock[AUDIO_OUTPUTS];
   for (int channel = 0; channel < AUDIO_OUTPUTS; channel++) {
     outBlock[channel] = allocate();
     if (outBlock[channel]) {
       for (int i = 0; i < AUDIO_BLOCK_SAMPLES; i++) {
-        float currentSample = echo.tick(sawtooth.tick()*2 - 1)*volume;
+        float currentSample = echo.tick(sawtooth.tick()*2 - 1)*0.5;
         currentSample = max(-1,min(1,currentSample));
         int16_t val = currentSample*MULT_16;
         outBlock[channel]->data[i] = val;

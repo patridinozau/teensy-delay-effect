@@ -20,6 +20,7 @@ echoR(AUDIO_SAMPLE_RATE_EXACT,10000)
 MyDsp::~MyDsp(){}
 
 void MyDsp::update(void) {
+  btn=false;
   audio_block_t* inBlock[AUDIO_OUTPUTS];
   audio_block_t* outBlock[AUDIO_OUTPUTS];
   for (int channel = 0; channel < AUDIO_OUTPUTS; channel++) {
@@ -31,8 +32,12 @@ void MyDsp::update(void) {
         if(inBlock[channel]){
           currentSample = inBlock[channel]->data[i]*DIV_16;
         }
-        if(channel == 0) currentSample = echoL.tick(currentSample);
+        if(!btn)
+        {
+          if(channel == 0) currentSample = echoL.tick(currentSample);
         else if(channel == 1) currentSample = echoR.tick(currentSample);
+        }
+        
         currentSample = max(-1,min(1,currentSample));
         int16_t val = currentSample*MULT_16;
         outBlock[channel]->data[i] = val;
